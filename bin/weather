@@ -11,7 +11,7 @@ try:
 
     def get_key(unit=False):
         key = input(
-            "Please provide an OpenWeatherMap API key (Guide here: https://github.com/cxllm/weather-cli#openweathermap-api-key)"
+            "Please provide an OpenWeatherMap API key (Guide here: https://github.com/cxllm/weather#openweathermap-api-key)"
         )
         if unit:
             unit = input(

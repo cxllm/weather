@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
 Name: openweathercli
-Version: 1.0.0.post1
+Version: 1.0.0.post2
 Summary: A CLI that uses Open Weather Map to provide current weather conditions
-Home-page: https://github.com/cxllm/weather-cli
+Home-page: https://github.com/cxllm/weather
 Author: Callum
 Author-email: me@cxllm.xyz
 License: UNKNOWN

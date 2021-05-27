@@ -4,9 +4,9 @@ with open("README.md", "r") as rd:
     long_description = rd.read()
 setup(
     name="openweathercli",
-    version="1.0.0-1",
+    version="1.0.0-2",
     description="A CLI that uses Open Weather Map to provide current weather conditions",
-    url="https://github.com/cxllm/weather-cli",
+    url="https://github.com/cxllm/weather",
     author="Callum",
     author_email="me@cxllm.xyz",
     classifiers=[

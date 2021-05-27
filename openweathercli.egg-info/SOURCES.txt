@@ -1,0 +1,8 @@
+README.md
+setup.py
+bin/weather
+openweathercli.egg-info/PKG-INFO
+openweathercli.egg-info/SOURCES.txt
+openweathercli.egg-info/dependency_links.txt
+openweathercli.egg-info/requires.txt
+openweathercli.egg-info/top_level.txt

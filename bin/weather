@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+try:
+    from requests import get
+    import json
+    import argparse
+    import os
+    from datetime import datetime
+
+    dashes = "--------------------------------------------------"
+    units = {"m": "metric", "i": "imperial"}
+
+    def get_key(unit=False):
+        key = input(
+            "Please provide an OpenWeatherMap API key (Guide here: https://github.com/cxllm/weather-cli#openweathermap-api-key)"
+        )
+        if unit:
+            unit = input(
+                "Which units would you like? Metric (Celsius) or Imperial (Fahrenheit)? (m/i) "
+            )
+            if unit.lower() not in ["m", "i"]:
+                print("Invalid option, please select either m or i")
+                exit(1)
+        f = open(f"{home}/.config/weather-py-config.json", "w")
+        j = {"key": key, "units": units[unit] if unit else f["units"]}
+        print(json.dumps(j))
+        f.seek(0)
+        f.write(json.dumps(j))
+        f.truncate()
+        f.close()
+        print("Please rerun the program")
+        exit(0)
+
+    home = os.path.expanduser("~")
+    parser = argparse.ArgumentParser(description="Weather info")
+    parser.add_argument(
+        "place",
+        metavar="name",
+        type=str,
+        nargs="+",
+        help="The place name to find the weather of",
+    )
+    parser.add_argument(
+        "--country", dest="country", default=None, help="Country which the place is in"
+    )
+    parser.add_argument(
+        "--state", dest="state", default=None, help="State which the place is in"
+    )
+    try:
+        config = json.load(open(f"{home}/.config/weather-py-config.json"))
+    except FileNotFoundError:
+        get_key(unit=True)
+    args = parser.parse_args()
+    args.place = " ".join(args.place)
+
+    def bold(text):
+        return f"\u001b[1m{text}\u001b[0m"
+
+    def weather(place="", state=None, country=None):
+        if not place:
+            raise ValueError("Place name is required!")
+        req = f'https://api.openweathermap.org/data/2.5/weather?q={place},{state or ""},{country or ""}&appid={config["key"]}&units=metric'
+        req = get(req)
+        info = req.json()
+        if info["cod"] == 401:
+            get_key(unit=True)
+        if info["cod"] == "404":
+            print(f"Place {place} was not found")
+            exit(1)
+        unit = (
+            "°" + "C"
+            if config["units"] == "metric"
+            else "F"
+            if config["units"] == "imperial"
+            else "K"
+        )
+        print(dashes)
+        print(
+            bold(
+                f"Current Weather Conditions in {info['name']} - {info['sys']['country']}"
+            )
+        )
+        print(dashes)
+        print(bold("Temperature"), str(round(info["main"]["temp"])) + unit)
+        print(bold("Feels Like"), str(round(info["main"]["feels_like"])) + unit)
+        print(bold("High"), str(round(info["main"]["temp_max"])) + unit)
+        print(bold("Low"), str(round(info["main"]["temp_min"])) + unit)
+        print(bold("Conditions"), str.title(info["weather"][0]["description"]))
+        print(
+            bold("Sunrise"),
+            datetime.fromtimestamp(info["sys"]["sunrise"]).strftime("%H:%M:%S"),
+        )
+        print(
+            bold("Sunset"),
+            datetime.fromtimestamp(info["sys"]["sunset"]).strftime("%H:%M:%S"),
+        )
+
+    weather(place=args.place, state=args.state, country=args.country)
+except KeyboardInterrupt:
+    print("Exiting... ")
+    exit(1)

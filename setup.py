@@ -8,7 +8,7 @@ setup(
     description="A CLI that uses Open Weather Map to provide current weather conditions",
     url="https://github.com/cxllm/weather",
     author="Callum",
-    author_email="me@cxllm.xyz",
+    author_email="hello@cxllm.xyz",
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: Freely Distributable",

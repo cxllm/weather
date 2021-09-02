@@ -94,7 +94,8 @@ try:
             datetime.fromtimestamp(info["sys"]["sunset"]).strftime("%H:%M:%S"),
         )
 
-    weather(place=args.place, state=args.state, country=args.country)
+    if __name__ == "__main__":
+        weather(place=args.place, state=args.state, country=args.country)
 except KeyboardInterrupt:
     print("Exiting... ")
     exit(1)
